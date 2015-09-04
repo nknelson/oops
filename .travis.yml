@@ -9,7 +9,7 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - g++-4.8
+      - g++-5.1.1
       - libboost-dev
       - libgtest-dev
       - valgrind
@@ -37,3 +37,6 @@ before_script:
 script:
     - date
     - make test
+
+after_failure:
+    - cat TestCollatz.tmp
