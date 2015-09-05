@@ -20,7 +20,7 @@ config:
 	git config -l
 
 scrub:
-	make clean
+	make  clean
 	rm -f  Collatz.log
 	rm -rf collatz-tests
 	rm -rf html
