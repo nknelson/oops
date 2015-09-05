@@ -1,19 +1,3 @@
-FILES :=                              \
-    .travis.yml                       \
-    collatz-tests/EID-RunCollatz.in   \
-    collatz-tests/EID-RunCollatz.out  \
-    collatz-tests/EID-TestCollatz.c++ \
-    collatz-tests/EID-TestCollatz.out \
-    Collatz.c++                       \
-    Collatz.h                         \
-    Collatz.log                       \
-    html                              \
-    RunCollatz.c++                    \
-    RunCollatz.in                     \
-    RunCollatz.out                    \
-    TestCollatz.c++                   \
-    TestCollatz.out
-
 CXX        := g++-4.8
 CXXFLAGS   := -pedantic -std=c++11 -Wall
 LDFLAGS    := -lgtest -lgtest_main -pthread
@@ -22,25 +6,6 @@ GCOVFLAGS  := -fprofile-arcs -ftest-coverage
 GPROF      := gprof
 GPROFFLAGS := -pg
 VALGRIND   := valgrind
-
-check:
-	@not_found=0;                                 \
-    for i in $(FILES);                            \
-    do                                            \
-        if [ -e $$i ];                            \
-        then                                      \
-            echo "$$i found";                     \
-        else                                      \
-            echo "$$i NOT FOUND";                 \
-            not_found=`expr "$$not_found" + "1"`; \
-        fi                                        \
-    done;                                         \
-    if [ $$not_found -ne 0 ];                     \
-    then                                          \
-        echo "$$not_found failures";              \
-        exit 1;                                   \
-    fi;                                           \
-    echo "success";
 
 clean:
 	rm -f *.gcda
@@ -69,18 +34,6 @@ status:
 	git status
 
 test: RunCollatz.tmp TestCollatz.tmp
-
-collatz-tests:
-	git clone https://github.com/cs371p-fall-2015/collatz-tests.git
-
-html: Doxyfile Collatz.h Collatz.c++ RunCollatz.c++ TestCollatz.c++
-	doxygen Doxyfile
-
-Collatz.log:
-	git log > Collatz.log
-
-Doxyfile:
-	doxygen -g
 
 RunCollatz: Collatz.h Collatz.c++ RunCollatz.c++
 	$(CXX) $(CXXFLAGS) $(GCOVFLAGS) Collatz.c++ RunCollatz.c++ -o RunCollatz
