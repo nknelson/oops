@@ -1,7 +1,8 @@
-CXX        := g++-4.8
-CXXFLAGS   := -pedantic -std=c++11 -Wall
-LDFLAGS    := -lgtest -lgtest_main -pthread
-GCOV       := gcov-4.8
+GTEST_DIR  := /opt/google/gtest
+CXX        := g++
+CXXFLAGS   := -pedantic -std=c++11 -Wall -isystem ${GTEST_DIR}/include -I${GTEST_DIR}
+LDFLAGS    := -L${GTEST_DIR}/lib -lgtest_main -pthread
+GCOV       := gcov
 GCOVFLAGS  := -fprofile-arcs -ftest-coverage
 GPROF      := gprof
 GPROFFLAGS := -pg
