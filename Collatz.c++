@@ -58,8 +58,18 @@ int cycle_length (int n) {
 int collatz_eval (int i, int j) {
 
   int max_cyc_len = 0;
-  for (int k = i; k <= j; ++k) {
-    int cyc_len= cycle_length(k);
+  int lb;
+  int ub;
+  if (i > j) {
+    lb = j;
+    ub = i;
+  }
+  else {
+    lb = i;
+    ub = j;
+  }
+  for (int k = lb; k <= ub; ++k) {
+    int cyc_len = cycle_length(k);
     //std::cout << "k = " << i << ", cyc_len = " << cyc_len << std::endl;
     max_cyc_len = (max_cyc_len >= cyc_len) ? max_cyc_len : cyc_len;
   }
