@@ -1,5 +1,5 @@
 // --------------------------------
-// projects/collatz/TestCollatz.c++
+// projects/collatz/TestKitayuta.c++
 // Copyright (C) 2015
 // Glenn P. Downing
 // --------------------------------
@@ -17,100 +17,90 @@
 
 #include "gtest/gtest.h"
 
-#include "Collatz.h"
+#include "Kitayuta.h"
 
 using namespace std;
 
 // -----------
-// TestCollatz
+// TestKitayuta
 // -----------
-
-// ----
-// read
-// ----
-
-TEST(CollatzFixture, read) {
-    string s("1 10\n");
-    const pair<int, int> p = collatz_read(s);
-    ASSERT_EQ( 1, p.first);
-    ASSERT_EQ(10, p.second);}
 
 // ----
 // eval
 // ----
 
-TEST(CollatzFixture, eval_1) {
-    const int v = collatz_eval(1, 10);
-    ASSERT_EQ(20, v);}
+TEST(KitayutaFixture, eval_1) {
+    const std::string s = isPalindromizable("abc");
+    ASSERT_STREQ(s.c_str(), "NA");}
 
-TEST(CollatzFixture, eval_2) {
-    const int v = collatz_eval(100, 200);
-    ASSERT_EQ(125, v);}
+// TEST(KitayutaFixture, eval_2) {
+//     const int v = collatz_eval(100, 200);
+//     ASSERT_STREQ(125, v);}
 
-TEST(CollatzFixture, eval_3) {
-    const int v = collatz_eval(201, 210);
-    ASSERT_EQ(89, v);}
+// TEST(KitayutaFixture, eval_3) {
+//     const int v = collatz_eval(201, 210);
+//     ASSERT_STREQ(89, v);}
 
-TEST(CollatzFixture, eval_4) {
-    const int v = collatz_eval(900, 1000);
-    ASSERT_EQ(174, v);}
+// TEST(KitayutaFixture, eval_4) {
+//     const int v = collatz_eval(900, 1000);
+//     ASSERT_STREQ(174, v);}
 
-TEST(CollatzFixture, eval_5) {
-     const int v = collatz_eval(1, 1);
-     ASSERT_EQ(1, v);}
+// TEST(KitayutaFixture, eval_5) {
+//      const int v = collatz_eval(1, 1);
+//      ASSERT_STREQ(1, v);}
 
-TEST(CollatzFixture, eval_6) {
-    const int v = collatz_eval(10, 10);
-    ASSERT_EQ(7, v);}
+// TEST(KitayutaFixture, eval_6) {
+//     const int v = collatz_eval(10, 10);
+//     ASSERT_STREQ(7, v);}
 
-TEST(CollatzFixture, eval_7) {
-    const int v = collatz_eval(22, 22);
-    ASSERT_EQ(16, v);}
+// TEST(KitayutaFixture, eval_7) {
+//     const int v = collatz_eval(22, 22);
+//     ASSERT_STREQ(16, v);}
 
-TEST(CollatzFixture, eval_8) {
-    const int v = collatz_eval(3, 3);
-    ASSERT_EQ(8, v);}
+// TEST(KitayutaFixture, eval_8) {
+//     const int v = collatz_eval(3, 3);
+//     ASSERT_STREQ(8, v);}
 
 // -----
 // print
 // -----
 
-TEST(CollatzFixture, print) {
-    ostringstream w;
-    collatz_print(w, 1, 10, 20);
-    ASSERT_EQ("1 10 20\n", w.str());}
+// TEST(KitayutaFixture, print) {
+//     ostringstream w;
+//     collatz_print(w, 1, 10, 20);
+//     ASSERT_STREQ("1 10 20\n", w.str());}
 
 // -----
 // solve
 // -----
 
-TEST(CollatzFixture, solve) {
-    istringstream r("1 10\n100 200\n201 210\n900 1000\n");
+TEST(KitayutaFixture, solve) {
+    istringstream r("abc\n");
     ostringstream w;
-    collatz_solve(r, w);
-    ASSERT_EQ("1 10 20\n100 200 125\n201 210 89\n900 1000 174\n", w.str());}
+    kitayuta_solve(r, w);
+    ASSERT_STREQ("abc: NA\n", w.str().c_str());}
 
 /*
-% g++ -fprofile-arcs -ftest-coverage -pedantic -std=c++11 -Wall Collatz.c++ TestCollatz.c++ -o TestCollatz -lgtest -lgtest_main -lpthread
+% g++ -fprofile-arcs -ftest-coverage -pedantic -std=c++11 -Wall Kitayuta.c++ TestKitayuta.c++ -o TestKitayuta -lgtest -lgtest_main -lpthread
 
 
 
-% valgrind TestCollatz                                         >  TestCollatz.out 2>&1
-% gcov -b Collatz.c++     | grep -A 5 "File 'Collatz.c++'"     >> TestCollatz.out
-% gcov -b TestCollatz.c++ | grep -A 5 "File 'TestCollatz.c++'" >> TestCollatz.out
+% valgrind TestKitayuta                                         >  TestKitayuta.out 2>&1
+% gcov -b Kitayuta.c++     | grep -A 5 "File 'Kitayuta.c++'"     >> TestKitayuta.out
+% gcov -b TestKitayuta.c++ | grep -A 5 "File 'TestKitayuta.c++'" >> TestKitayuta.out
 
 
 
-% cat TestCollatz.out
+% cat TestKitayuta.out
 ==14225== Memcheck, a memory error detector
 ==14225== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
 ==14225== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
-==14225== Command: TestCollatz
+==14225== Command: TestKitayuta
 ==14225==
 Running main() from gtest_main.cc
 [==========] Running 7 tests from 1 test case.
 [----------] Global test environment set-up.
-[----------] 7 tests from Collatz
+[----------] 7 tests from Kitayuta
 [ RUN      ] Collatz.read
 [       OK ] Collatz.read (31 ms)
 [ RUN      ] Collatz.eval_1

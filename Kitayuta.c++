@@ -64,7 +64,7 @@ string isPalindromizable(const string & s) {
 }
 
 // -------------
-// collatz_solve
+// kitayuta_solve
 // -------------
 
 void kitayuta_solve (istream& r, ostream& w) {

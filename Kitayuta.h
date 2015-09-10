@@ -1,11 +1,7 @@
 // --------------------------
-// projects/collatz/Collatz.h
-// Copyright (C) 2015
-// Glenn P. Downing
-// --------------------------
 
-#ifndef Collatz_h
-#define Collatz_h
+#ifndef Kitayuta_h
+#define Kitayuta_h
 
 // --------
 // includes
@@ -17,9 +13,9 @@
 
 using namespace std;
 
-
+string isPalindromizable(const string &);
 // -------------
-// collatz_solve
+// kitayuta_solve
 // -------------
 
 /**
@@ -28,4 +24,4 @@ using namespace std;
  */
 void kitayuta_solve (istream& r, ostream& w);
 
-#endif // Collatz_h
+#endif // Kitayuta_h
