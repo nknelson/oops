@@ -33,33 +33,18 @@ TEST(KitayutaFixture, eval_1) {
     const std::string s = isPalindromizable("abc");
     ASSERT_STREQ(s.c_str(), "NA");}
 
-// TEST(KitayutaFixture, eval_2) {
-//     const int v = collatz_eval(100, 200);
-//     ASSERT_STREQ(125, v);}
+TEST(KitayutaFixture, eval_2) {
+  const std::string s = isPalindromizable("aa");
+  ASSERT_STREQ(s.c_str(), "aaa");}
 
-// TEST(KitayutaFixture, eval_3) {
-//     const int v = collatz_eval(201, 210);
-//     ASSERT_STREQ(89, v);}
+TEST(KitayutaFixture, eval_3) {
+  const std::string s = isPalindromizable("revive");
+  ASSERT_STREQ(s.c_str(), "reviver");}
 
-// TEST(KitayutaFixture, eval_4) {
-//     const int v = collatz_eval(900, 1000);
-//     ASSERT_STREQ(174, v);}
+TEST(KitayutaFixture, eval_4) {
+  const std::string s = isPalindromizable("tstset");
+  ASSERT_STREQ(s.c_str(), "testset");}
 
-// TEST(KitayutaFixture, eval_5) {
-//      const int v = collatz_eval(1, 1);
-//      ASSERT_STREQ(1, v);}
-
-// TEST(KitayutaFixture, eval_6) {
-//     const int v = collatz_eval(10, 10);
-//     ASSERT_STREQ(7, v);}
-
-// TEST(KitayutaFixture, eval_7) {
-//     const int v = collatz_eval(22, 22);
-//     ASSERT_STREQ(16, v);}
-
-// TEST(KitayutaFixture, eval_8) {
-//     const int v = collatz_eval(3, 3);
-//     ASSERT_STREQ(8, v);}
 
 // -----
 // print
