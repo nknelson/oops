@@ -11,17 +11,17 @@ clean:
 	rm -f *.gcda
 	rm -f *.gcno
 	rm -f *.gcov
-	rm -f RunCollatz
-	rm -f RunCollatz.tmp
-	rm -f TestCollatz
-	rm -f TestCollatz.tmp
+	rm -f RunKitayuta
+	rm -f RunKitayuta.tmp
+	rm -f TestKitayuta
+	rm -f TestKitayuta.tmp
 
 config:
 	git config -l
 
 scrub:
 	make  clean
-	rm -f  Collatz.log
+	rm -f  Kitayuta.log
 	rm -rf collatz-tests
 	rm -rf html
 	rm -rf latex
@@ -33,20 +33,20 @@ status:
 	git remote -v
 	git status
 
-test: RunCollatz.tmp TestCollatz.tmp
+test: RunKitayuta.tmp TestKitayuta.tmp
 
-RunCollatz: Collatz.h Collatz.c++ RunCollatz.c++
-	$(CXX) $(CXXFLAGS) $(GCOVFLAGS) Collatz.c++ RunCollatz.c++ -o RunCollatz
+RunKitayuta: Kitayuta.h Kitayuta.c++ RunKitayuta.c++
+	$(CXX) $(CXXFLAGS) $(GCOVFLAGS) Kitayuta.c++ RunKitayuta.c++ -o RunKitayuta
 
-RunCollatz.tmp: RunCollatz
-	./RunCollatz < RunCollatz.in > RunCollatz.tmp
-	diff RunCollatz.tmp RunCollatz.out
+RunKitayuta.tmp: RunKitayuta
+	./RunKitayuta < RunKitayuta.in > RunKitayuta.tmp
+	diff RunKitayuta.tmp RunKitayuta.out
 
-TestCollatz: Collatz.h Collatz.c++ TestCollatz.c++
-	$(CXX) $(CXXFLAGS) $(GCOVFLAGS) Collatz.c++ TestCollatz.c++ -o TestCollatz $(LDFLAGS)
+TestKitayuta: Kitayuta.h Kitayuta.c++ TestKitayuta.c++
+	$(CXX) $(CXXFLAGS) $(GCOVFLAGS) Kitayuta.c++ TestKitayuta.c++ -o TestKitayuta $(LDFLAGS)
 
-TestCollatz.tmp: TestCollatz
-	$(VALGRIND) ./TestCollatz                                       >  TestCollatz.tmp 2>&1
-	$(GCOV) -b Collatz.c++     | grep -A 5 "File 'Collatz.c++'"     >> TestCollatz.tmp
-	$(GCOV) -b TestCollatz.c++ | grep -A 5 "File 'TestCollatz.c++'" >> TestCollatz.tmp
-	cat TestCollatz.tmp
+TestKitayuta.tmp: TestKitayuta
+	$(VALGRIND) ./TestKitayuta                                       >  TestKitayuta.tmp 2>&1
+	$(GCOV) -b Kitayuta.c++     | grep -A 5 "File 'Kitayuta.c++'"     >> TestKitayuta.tmp
+	$(GCOV) -b TestKitayuta.c++ | grep -A 5 "File 'TestKitayuta.c++'" >> TestKitayuta.tmp
+	cat TestKitayuta.tmp
