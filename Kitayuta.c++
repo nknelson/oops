@@ -10,10 +10,14 @@
 
 #include <cassert>  // assert
 #include <iostream> // endl, istream, ostream
+#include <sstream>
 #include <sstream>  // istringstream
 #include <string>   // getline, string
+#include <utility>  // make_pair, pair
 #include <vector>
 
+
+#include "Kitayuta.h"
 
 using namespace std;
 
@@ -31,6 +35,7 @@ bool isPalindrome (const string & s) {
 string isPalindromizable(const string & s) {
   string ret_s = s;
   size_t length = s.length();
+
   if (length <= 2) {
       ret_s.push_back(s.front());
       return ret_s;
@@ -67,14 +72,8 @@ void kitayuta_solve (istream& r, ostream& w) {
     
     while (getline(r, input_s)) {
       ostringstream output_s;
-      //w << input_s << ": ";
+      w << input_s << ": ";
       //output_s << input_s << " is";
       w << isPalindromizable(input_s) << endl;
     }
-}
-
-int main () {
-    using namespace std;
-    kitayuta_solve(cin, cout);
-    return 0;
 }
