@@ -21,7 +21,7 @@ using namespace std;
 // collatz_solve
 // -------------
 
-void twobuttons_solve (istream& r, ostream& w) {
+void two_buttons_solve (istream& r, ostream& w) {
   string s;
   getline(r, s);
   istringstream sin(s);
@@ -42,11 +42,15 @@ void twobuttons_solve (istream& r, ostream& w) {
 	ctr += (n - m);
 	break;
       }
-      else if ((m & 0x1) == 0)
+      else if ((m & 0x1) == 0) {
 	m >>= 1;
-      else
+	++ctr;
+      }
+      else {
 	m += 1;
-      ++ctr;
+	m >>= 1;
+	ctr += 2;
+      }
     }
   }
   w << ctr;
@@ -54,6 +58,6 @@ void twobuttons_solve (istream& r, ostream& w) {
 
 int main () {
     using namespace std;
-    twobuttons_solve(cin, cout);
+    two_buttons_solve(cin, cout);
     return 0;
 }
