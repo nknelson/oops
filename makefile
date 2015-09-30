@@ -35,6 +35,9 @@ status:
 
 test: RunKitayuta.tmp TestKitayuta.tmp
 
+dijkstra: dijkstra.c++
+	g++ -std=c++11 -g -o dijkstra dijkstra.c++
+
 RunKitayuta: Kitayuta.h Kitayuta.c++ RunKitayuta.c++
 	$(CXX) $(CXXFLAGS) $(GCOVFLAGS) Kitayuta.c++ RunKitayuta.c++ -o RunKitayuta
 

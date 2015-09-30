@@ -98,11 +98,8 @@ void populate_graph(std::vector<GraphVertex> & graph,
     sin >> destination_vertex >> m;
     assert((2<=destination_vertex) && (destination_vertex <= 100000));
     assert((0<=m) && (m <= 100000));
-    // Resize the GraphVertex vector to hold all of the edges.  Note that the size
-    // of the vector is twice the number of edges due to the way I store the data.
-    // For ever edge from 'a' to 'b' I have to store not only that edge but also
-    // the edge from 'b' to 'a'.
-    graph.resize((2*m)+1);
+    // Resize the GraphVertex vector to match the number of vertices (plus one)
+    graph.resize(destination_vertex+1);
 
     // Read in a, b, w for each edge
     for (uint32_t edge_count=0; edge_count<m; edge_count++) {
@@ -144,7 +141,7 @@ void dump_graph(std::vector<GraphVertex> & graph,
 // Find the shortest path from vertex '1' to the destination vertex
 //
 // Note: See note above about zero-based vs. one-based.  I make my vector of
-// Node object one larger than the number of vertices, and I ignore Node[0].
+// Node objects one larger than the number of vertices, and I ignore Node[0].
 void solve(std::vector<GraphVertex> & graph, std::vector<int32_t> & solution,
            const uint32_t destination_vertex) {
     std::vector<Node> nodes(destination_vertex+1);
@@ -156,7 +153,7 @@ void solve(std::vector<GraphVertex> & graph, std::vector<int32_t> & solution,
     int32_t next_vertex = 1;
     bool done = false;
     while (!done) {
-        int nkn1 = 1;
+        int nkn1 = 1;  // this is just here so that I can put a bkpt at the top of the while loop
         for (auto & e : graph[next_vertex].getEdge()) {
             int32_t v = e.getVertex(); // This edge goes from 'next_vertex' to 'v'
             if (nodes[v].getVisited()) {
@@ -189,7 +186,7 @@ void solve(std::vector<GraphVertex> & graph, std::vector<int32_t> & solution,
         }
         nodes[next_vertex].setVisited(true);
         done = (cost==INT32_MAX);
-        int nkn2=1;
+        int nkn2=1; // this is just here so that I can put a bkpt at the bottom of the while loop
     }
 
     // If no cheapest node then destination_vertex not reachable
