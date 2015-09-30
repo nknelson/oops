@@ -38,6 +38,9 @@ test: RunKitayuta.tmp TestKitayuta.tmp
 dijkstra: dijkstra.c++
 	g++ -std=c++11 -g -o dijkstra dijkstra.c++
 
+dijkstra_test: dijkstra
+	for i in 1 2 3 4 5 6 7 8 9 ; do echo input$$i ; ./dijkstra < input$$i | diff - result$$i ; done
+
 RunKitayuta: Kitayuta.h Kitayuta.c++ RunKitayuta.c++
 	$(CXX) $(CXXFLAGS) $(GCOVFLAGS) Kitayuta.c++ RunKitayuta.c++ -o RunKitayuta
 
