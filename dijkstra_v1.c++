@@ -6,7 +6,6 @@
 #include <forward_list> // std::forward_list
 #include <vector>       // std::vector
 #include <deque>
-#include <map>
 
 #include <cstdint>
 
@@ -31,11 +30,11 @@ public:
         distance_(d)
     {}
 
-   uint32_t getVertex() { return vertex_; }
+    int32_t getVertex() { return vertex_; }
     int32_t getDistance() { return distance_; }
 
 private:
-   uint32_t vertex_;
+    int32_t vertex_;
     int32_t distance_;
 };
 
@@ -45,7 +44,7 @@ public:
         edge_()
     {}
 
-    void addEdge(const uint32_t & v, const int32_t & d) {
+    void addEdge(const int32_t & v, const int32_t & d) {
         edge_.emplace_after(edge_.before_begin(), v, d);
     }
 
@@ -65,8 +64,8 @@ public:
         marked_(false)
     {}
 
-   uint32_t getPrevVertex() const { return prevVertex_; }
-    void setPrevVertex(const uint32_t v) { prevVertex_ = v; }
+    int32_t getPrevVertex() const { return prevVertex_; }
+    void setPrevVertex(const int32_t v) { prevVertex_ = v; }
 
     int32_t getDistance() const { return distance_; }
     void setDistance(const int32_t d) { distance_ = d; }
@@ -75,7 +74,7 @@ public:
     void setMarked(const bool v) { marked_ = v; }
 
 private:
-    uint32_t prevVertex_;
+    int32_t prevVertex_;
     int32_t distance_;
     bool marked_;
 };
@@ -86,8 +85,7 @@ private:
 // while our graph starts with vertex '1'.  For this reason, I ignore graph[0] and
 // just start things off with graph[1].
 void populate_graph(std::vector<GraphVertex> & graph,
-                    uint32_t & destination_vertex)
-{
+                    uint32_t & destination_vertex) {
     // Input
     // The first line contains two integers n and m (2 <= n <= 10^5, 0 <= m <= 10^5),
     // where n is the number of vertices and m is the number of edges. Following m
@@ -115,7 +113,6 @@ void populate_graph(std::vector<GraphVertex> & graph,
         graph[a].addEdge(b, w);
         graph[b].addEdge(a, w);
     }
-    
 
     return;
 }
@@ -146,85 +143,68 @@ void dump_graph(std::vector<GraphVertex> & graph,
 //
 // Note: See note above about zero-based vs. one-based.  I make my vector of
 // Node objects one larger than the number of vertices, and I ignore Node[0].
-void solve(std::vector<GraphVertex> & graph,
-	   std::deque<int32_t> & solution,
-           const uint32_t destination_vertex)
-{
-  std::map<uint32_t, Node> unmarked_nodes;
-  std::map<uint32_t, uint32_t> marked_nodes;
-    
+void solve(std::vector<GraphVertex> & graph, std::deque<int32_t> & solution,
+           const uint32_t destination_vertex) {
+    std::vector<Node> nodes(destination_vertex+1);
     // Initialze the first row of the solution
-    unmarked_nodes[1].setPrevVertex(1);
-    unmarked_nodes[1].setDistance(0);
-    uint32_t marked_vertex = 1;
+    nodes[1].setPrevVertex(1);
+    nodes[1].setDistance(0);
+    nodes[1].setMarked(true);
+    // Fill in all of the vertices reachable from vertex 1
+    int32_t curr_vertex = 1;
     bool done = false;
     while (!done) {
-      marked_nodes[marked_vertex] = unmarked_nodes[marked_vertex].getPrevVertex();
-
-      if (marked_vertex == destination_vertex) {
-	done = true;
-	break;
-      }
-      
-      int32_t marked_dist = unmarked_nodes[marked_vertex].getDistance();
-      unmarked_nodes.erase(marked_vertex);
-      
-	for (auto & e : graph[marked_vertex].getEdge()) {
-           uint32_t v = e.getVertex(); // This edge goes from 'curr_vertex' to 'v'
-	   if (marked_nodes.find(v) != marked_nodes.end()) {
-	     // Already marked
-	     continue;
-	   }
-	   // v is in unmarked_nodes
-	   int32_t d = e.getDistance();
-	   d += marked_dist;
-	   if (unmarked_nodes.find(v) == unmarked_nodes.end()) {
-	     // First time node is visited, create entry
-	     unmarked_nodes[v].setPrevVertex(marked_vertex);
-	     unmarked_nodes[v].setDistance(d);
-	   }
-	   else if (d < unmarked_nodes[v].getDistance()) {
-	     unmarked_nodes[v].setPrevVertex(marked_vertex);
-	     unmarked_nodes[v].setDistance(d);
-	   }
+        int nkn1 = 1;  // this is just here so that I can put a bkpt at the top of the while loop
+	// assert (nodes[curr_vertex].getDistance() != INT32_MAX);
+	for (auto & e : graph[curr_vertex].getEdge()) {
+            int32_t v = e.getVertex(); // This edge goes from 'curr_vertex' to 'v'
+            if (nodes[v].getMarked()) {
+                continue;
+            }
+            int32_t d = e.getDistance();
+	    d += nodes[curr_vertex].getDistance();
+            if (d < nodes[v].getDistance()) {
+	      nodes[v].setPrevVertex(curr_vertex);
+	      nodes[v].setDistance(d);
+	    }
 	}
-	
+
 	// Find the least expensive edge
-	int32_t least_cost = INT32_MAX;
-	for (auto & it : unmarked_nodes) {
-	  if (it.second.getDistance() < least_cost) {
-	    marked_vertex = it.first;
-	    least_cost = it.second.getDistance();
+	int32_t cost = INT32_MAX;
+	for (uint32_t j=1; j<destination_vertex+1; j++) {
+	  if (nodes[j].getMarked()) {
+	    continue;
+	  }
+	  if (nodes[j].getDistance() < cost) {
+	    curr_vertex = j;
+	    cost = nodes[j].getDistance();
 	  }
 	}
-	
-	if (least_cost==INT32_MAX) {
-	  done = true;
-	}
-	
+	nodes[curr_vertex].setMarked(true);
+	done = (cost==INT32_MAX);
         int nkn2=1; // this is just here so that I can put a bkpt at the bottom of the while loop
     }
     
     // If no cheapest node then destination_vertex not reachable
-    if (marked_vertex == 1) {
+    if (curr_vertex == 1) {
       return;
     }
     
     // Did we find a path to the destination vertex?
-    if (marked_nodes.find(destination_vertex) != marked_nodes.end()) {
+    if (nodes[destination_vertex].getMarked()) {
       solution.push_front(destination_vertex);
-      // Previous vertex is always a marked node
-      uint32_t prev_vertex = marked_nodes[destination_vertex];
+      curr_vertex = nodes[destination_vertex].getPrevVertex();
       do {
-	solution.push_front(prev_vertex);
-	if (prev_vertex == 1) {
+	solution.push_front(curr_vertex);
+	if (curr_vertex == 1) {
 	  break;
 	} else {
-	  prev_vertex = marked_nodes[prev_vertex];
+	  curr_vertex = nodes[curr_vertex].getPrevVertex();
 	}
       } while (true);
     }
     
+    //std::reverse(solution.begin(), solution.end());
     return;
 }
 
@@ -234,7 +214,7 @@ int main() {
   std::vector<GraphVertex> graph;
   uint32_t destination_vertex;
   
-  populate_graph(graph, destination_vertex);
+    populate_graph(graph, destination_vertex);
 #ifdef DEBUG
     dump_graph(graph, destination_vertex);
 #endif
