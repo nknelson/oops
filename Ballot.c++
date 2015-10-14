@@ -1,6 +1,7 @@
 #include <cassert>  // assert
 #include <iostream> // endl, istream, ostream
 #include <sstream>  // istringstream
+#include <unordered_map>      // unordered multimap
 #include <map>      // multimap
 #include <vector>
 #include <queue>
@@ -15,7 +16,7 @@ void redistribute(Votes_t & votes, uint32_t loser) {
         // assert (ballot.empty() == false);
         uint32_t lucky_guy = ballot.front();
         ballot.pop();
-        votes[lucky_guy].push_back(ballot);
+        votes[lucky_guy].emplace_back(ballot);
     }
     votes[loser].clear();
 
@@ -23,13 +24,13 @@ void redistribute(Votes_t & votes, uint32_t loser) {
 
 void process_votes(Votes_t & votes, uint32_t win_threshold,
                    std::vector<std::string> candidate_names) {
-    // Jyotsna to finish
     typedef std::multimap<uint32_t, uint32_t> Cand_MultiMap;
 
     uint32_t max = 0;
     uint32_t min = 0xffffffff;
+    Cand_MultiMap candidates_mmap;
     while (true) {
-        Cand_MultiMap candidates_mmap;
+        candidates_mmap.clear();
         for (uint32_t i=1; i < votes.size(); ++i) {
             uint32_t vote_count = votes[i].size();
             if (vote_count > 0) {
@@ -65,10 +66,14 @@ void process_votes(Votes_t & votes, uint32_t win_threshold,
             return;
         }
         else {
-            std::pair<Cand_MultiMap::iterator, Cand_MultiMap::iterator> ii =
-                candidates_mmap.equal_range(min);
-            for (Cand_MultiMap::iterator it = ii.first; it != ii.second; ++it) {
-                redistribute (votes, it->second);
+            if (candidates_mmap.count(min) > 0) {
+                std::pair<Cand_MultiMap::iterator, Cand_MultiMap::iterator> ii =
+                    candidates_mmap.equal_range(min);
+                for (Cand_MultiMap::iterator it = ii.first; it != ii.second; ++it) {
+                    redistribute (votes, it->second);
+                }
+            } else {
+                redistribute (votes, (*(candidates_mmap.find(min))).second);
             }
 
         }
@@ -85,7 +90,7 @@ void populate_votes(Votes_t & votes, std::string & ballot, const uint32_t num_ca
         sin >> next_vote;
         vote_queue.emplace(next_vote);
     }
-    votes[candidate].push_back(vote_queue);
+    votes[candidate].emplace_back(vote_queue);
     return;
 }
 
