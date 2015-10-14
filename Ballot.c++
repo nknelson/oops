@@ -16,7 +16,9 @@ void redistribute(Votes_t & votes, uint32_t loser) {
         // assert (ballot.empty() == false);
         uint32_t lucky_guy = ballot.front();
         ballot.pop();
-        votes[lucky_guy].emplace_back(ballot);
+        if (votes[lucky_guy].size() > 0) {
+            votes[lucky_guy].emplace_back(ballot);
+        }
     }
     votes[loser].clear();
 
