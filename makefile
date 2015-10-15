@@ -35,6 +35,9 @@ status:
 
 test: RunKitayuta.tmp TestKitayuta.tmp
 
+Ballot: Ballot.c++
+	g++ -std=c++11 -g -o Ballot Ballot.c++
+
 dijkstra: dijkstra.c++
 	g++ -std=c++11 -g -o dijkstra dijkstra.c++
 
