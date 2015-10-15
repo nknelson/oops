@@ -12,12 +12,16 @@ typedef std::vector<std::vector<std::queue<uint32_t>>> Votes_t;
 void redistribute(Votes_t & votes, uint32_t loser) {
     // Jyotsna to do
     std::vector<std::queue<uint32_t>> & loser_votes = votes[loser];
-    for (auto & ballot : votes[loser]) {
+    for (auto & ballot : loser_votes) {
         // assert (ballot.empty() == false);
-        uint32_t lucky_guy = ballot.front();
-        ballot.pop();
-        if (votes[lucky_guy].size() > 0) {
-            votes[lucky_guy].emplace_back(ballot);
+        bool done = ballot.size() == 0;
+        while (!done) {
+            uint32_t lucky_guy = ballot.front();
+            ballot.pop();
+            if (votes[lucky_guy].size() > 0) {
+                votes[lucky_guy].emplace_back(ballot);
+                done = true;
+            }
         }
     }
     votes[loser].clear();
@@ -28,10 +32,10 @@ void process_votes(Votes_t & votes, uint32_t win_threshold,
                    std::vector<std::string> candidate_names) {
     typedef std::multimap<uint32_t, uint32_t> Cand_MultiMap;
 
-    uint32_t max = 0;
-    uint32_t min = 0xffffffff;
     Cand_MultiMap candidates_mmap;
     while (true) {
+        uint32_t max = 0;
+        uint32_t min = 0xffffffff;
         candidates_mmap.clear();
         for (uint32_t i=1; i < votes.size(); ++i) {
             uint32_t vote_count = votes[i].size();
@@ -68,7 +72,7 @@ void process_votes(Votes_t & votes, uint32_t win_threshold,
             return;
         }
         else {
-            if (candidates_mmap.count(min) > 0) {
+            if (candidates_mmap.count(min) > 1) {
                 std::pair<Cand_MultiMap::iterator, Cand_MultiMap::iterator> ii =
                     candidates_mmap.equal_range(min);
                 for (Cand_MultiMap::iterator it = ii.first; it != ii.second; ++it) {
@@ -148,6 +152,10 @@ void ballot_solve(std::istream & r, Votes_t & votes,
         } while (true);
 
         process_votes(votes, num_votes/2, candidate_names);
+
+        if (j < (test_cases-1)) {
+            std::cout << std::endl;
+        }
     }
 }
 
